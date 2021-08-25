@@ -1,19 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AgendaController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('agenda', [AgendaController::class, 'index']);
+Route::get('agenda/create', [AgendaController::class, 'create']);
+Route::post('agenda', [AgendaController::class, 'store']);
+Route::get('agenda/edit/{id}', [AgendaController::class, 'edit']);
+Route::get('agenda/{id}', [AgendaController::class, 'show']);
+Route::put('agenda/{id}', [AgendaController::class, 'update']);
+Route::delete('agenda/{id}', [AgendaController::class, 'delete']);
