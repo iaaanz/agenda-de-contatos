@@ -45,7 +45,6 @@
                 <li class="list-group-item">An item</li>
                 <li class="list-group-item">A second item</li>
                 <li class="list-group-item">A third item</li>
-                <!-- <ContactVue /> -->
               </ul>
               <div class="card-body">
               </div>
@@ -90,6 +89,10 @@ export default {
 
   .card-header {
     color: #5B5FE9;
+  }
+
+  .no-uppercase {
+    text-transform: none;
   }
 
   .search_bar:focus {

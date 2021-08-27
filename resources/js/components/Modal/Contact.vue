@@ -2,45 +2,81 @@
   <transition name="modal">
     <div class="modal-mask ">
       <div class="modal-wrapper">
-        <div class="modal-container">
-          <!-- <div class="modal-dialog"> -->
-          <!-- <div class="modal-content"> -->
-          <div class="modal-header">
-            <h5 class="modal-title">Novo Contato</h5>
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="">
-                <v-text-field
-                  label="Nome"
-                ></v-text-field>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="card primary">
+              <div class="card-header p-3">
+                <div class="row">
+                  <h3 class="text-center text-white">Novo Contato</h3>
+                </div>
               </div>
-            </form>
+              <div class="card-body bg-white">
+                <form>
+                  <div class="row">
+                    <div class="col">
+                      <v-text-field
+                        label="Nome"
+                      ></v-text-field>
+                    </div>
+                    <div class="col">
+                      <v-text-field
+                        label="E-mail"
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-5">
+                      <v-text-field
+                        v-model="phone"
+                        v-mask="maskTel()"
+                        label="Telefone"
+                      ></v-text-field>
+                    </div>
+                    <div class="col">
+                      <v-text-field
+                        v-model="cep"
+                        v-mask="maskCep()"
+                        label="Cep"
+                      ></v-text-field>
+                    </div>
+                    <div class="col-3">
+                      <v-text-field
+                        v-model="num"
+                        label="Número"
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <v-text-field
+                        v-model="lograd"
+                        disabled
+                        label="Logradouro"
+                      ></v-text-field>
+                    </div>
+                  </div>
+                  <!-- TODO: Finalizar com os campos faltantes -->
+                </form>
+              </div>
+              <div class="card-footer text-center bg-white">
+                <v-btn
+                  color="green"
+                  class="no-uppercase white--text"
+                  elevation="2"
+                >
+                  Salvar
+                </v-btn>
+                <v-btn
+                  color="red"
+                  class="no-uppercase white--text"
+                  elevation="2"
+                  @click="close"
+                >
+                  Cancelar
+                </v-btn>
+              </div>
+            </div>
           </div>
-          <div class="modal-footer">
-            <v-btn
-              color="green"
-              class="no-uppercase white--text"
-              elevation="2"
-            >
-              Salvar
-            </v-btn>
-            <v-btn
-              color="red"
-              class="no-uppercase white--text"
-              elevation="2"
-              @click="close"
-            >
-              Cancelar
-            </v-btn>
-          </div>
-          <!-- </div> -->
-          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -50,18 +86,42 @@
 <script>
 export default {
   name: 'ContactModal',
+  data() {
+    return {
+      phone: '',
+      cep: '',
+      num: '',
+      lograd: 'Rua Alberto Biavatti'
+    }
+  },
   methods: {
     close() {
       this.$emit('close');
     },
-  },
+    maskTel(phone) {
+      if (!phone) {
+        return this.phone.length === 15 ? '(##) #####-####' : '(##) ####-#####'
+      }
+    },
+    maskCep(cep) {
+      if (!cep) {
+        return this.cep.length === 5 ? '' : '#####-###'
+      }
+    }
+  }
 };
 </script>
 <style>
 
-.no-uppercase {
-  text-transform: none;
-}
+  .primary {
+    border: none;
+    border-radius: 1rem;
+  }
+
+  .modal-content {
+    border: none;
+    background-color: transparent;
+  }
 
 .modal-mask {
   position: fixed;
@@ -80,28 +140,8 @@ export default {
   vertical-align: middle;
 }
 
-.modal-container {
-  width: 600px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
 .modal-body {
   margin: 20px 0;
-}
-
-.modal-footer {
-  padding-bottom: 0;
 }
 
 .modal-default-button {

@@ -3,12 +3,14 @@ import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VueMask from 'v-mask'
 import App from './App.vue'
 import vuetify from './vuetify'
 
 require('./bootstrap');
 
 library.add(faSearch);
+Vue.use(VueMask);
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
