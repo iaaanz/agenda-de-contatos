@@ -12,28 +12,34 @@
               </div>
               <div class="card-body bg-white">
                 <v-form
+                  id="contact-registration-form"
                   ref="form"
                   v-model="valid"
                   lazy-validation
+                  @submit.prevent="formSubmit"
                 >
                   <div class="row">
                     <div class="col-5 my-auto">
                       <PictureInput
+                        ref="pictureInput"
                         :hide-change-button="true"
                         :prefill="defaultImgUrl"
                         width="120"
                         height="120"
-                        accept="image/jpeg,image/png"
+                        accept="image/jpeg,image/png,image/jpg"
                         button-class="btn"
                         radius="50"
+                        @change="onChange"
                       />
                     </div>
                     <div class="col-7">
                       <v-text-field
+                        v-model="fields.name"
                         label="Nome"
                         :rules="nameRule"
                       ></v-text-field>
                       <v-text-field
+                        v-model="fields.email"
                         label="E-mail"
                       ></v-text-field>
                     </div>
@@ -41,14 +47,14 @@
                   <div class="row">
                     <div class="col-12 col-sm-5">
                       <v-text-field
-                        v-model="phone"
+                        v-model="fields.phone"
                         v-mask="maskTel()"
                         label="Telefone"
                       ></v-text-field>
                     </div>
                     <div class="col">
                       <v-text-field
-                        v-model="cep"
+                        v-model="fields.cep"
                         v-mask="maskCep()"
                         label="Cep"
                         @keyup="fillAddress()"
@@ -56,7 +62,7 @@
                     </div>
                     <div class="col-3">
                       <v-text-field
-                        v-model="num"
+                        v-model="fields.num"
                         label="Número"
                       ></v-text-field>
                     </div>
@@ -64,20 +70,20 @@
                   <div class="row">
                     <div class="col-12 col-sm-6">
                       <v-text-field
-                        v-model="address.logradouro"
+                        v-model="fields.address.logradouro"
                         disabled
                         label="Logradouro"
                       ></v-text-field>
                     </div>
                     <div class="col">
                       <v-text-field
-                        v-model="address.complemento"
+                        v-model="fields.address.complemento"
                         label="Complemento"
                       ></v-text-field>
                     </div>
                     <div class="col-3 col-sm-2">
                       <v-text-field
-                        v-model="address.uf"
+                        v-model="fields.address.uf"
                         disabled
                         label="UF"
                       ></v-text-field>
@@ -86,14 +92,14 @@
                   <div class="row">
                     <div class="col-12 col-sm-6">
                       <v-text-field
-                        v-model="address.bairro"
+                        v-model="fields.address.bairro"
                         disabled
                         label="Bairro"
                       ></v-text-field>
                     </div>
                     <div class="col-12 col-sm-6">
                       <v-text-field
-                        v-model="address.localidade"
+                        v-model="fields.address.localidade"
                         disabled
                         label="Cidade"
                       ></v-text-field>
@@ -105,11 +111,12 @@
                 <div class="row p-3">
                   <v-btn
                     rounded
+                    type="submit"
+                    form="contact-registration-form"
                     color="primary"
                     class="no-uppercase white--text"
                     elevation="2"
                     :disabled="!valid"
-                    @click="validate"
                   >
                     Salvar
                   </v-btn>
@@ -142,39 +149,57 @@ export default {
     return {
       valid: true,
       defaultImgUrl: 'img/default_user.png',
-      cep: '',
-      address: '',
-      phone: '',
-      num: '',
-      img: '',
+      fields: {
+        address: {},
+      },
       nameRule: [
         value => !!value || 'Obrigatório',
       ],
     }
   },
   methods: {
-    validate () {
-      this.$refs.form.validate()
+    onChange(img) {
+      if (img) this.fields.img_user = this.$refs.pictureInput.file
+    },
+    formSubmit() {
+      if (!this.$refs.form.validate()) return;
+
+      const config = {
+        header: {
+          'content-type': 'multipart/form-data'
+        }
+      }
+
+      axios.post('/api/agenda/create', this.fields, config)
+        .then(res => {
+          // this.success = res.data.success;
+          console.log(res.data);
+        })
+        .catch(err => {
+          // this.output = err;
+          console.log(err);
+        })
+
     },
     fillAddress() {
       // eslint-disable-next-line no-return-assign
-      return this.cep.length !== 9 ? this.address = '' : this.getAddress();
+      return this.fields.cep.length !== 9 ? this.fields.address = {} : this.getAddress();
     },
     getAddress() {
-      axios.get(`https://viacep.com.br/ws/${this.cep}/json/`)
+      axios.get(`https://viacep.com.br/ws/${this.fields.cep}/json/`)
         .then(res => {
-          this.address = res.data;
+          this.fields.address = res.data;
         })
         .catch(err => console.log(err))
     },
     maskTel() {
-      if (this.phone) {
-        return this.phone.length === 15 ? '(##) #####-####' : '(##) ####-#####'
+      if (this.fields.phone) {
+        return this.fields.phone.length === 15 ? '(##) #####-####' : '(##) ####-#####'
       }
     },
     maskCep() {
-      if (this.cep) {
-        return this.cep.length === 5 ? '' : '#####-###'
+      if (this.fields.cep) {
+        return this.fields.cep.length === 5 ? '' : '#####-###'
       }
     },
     close() {

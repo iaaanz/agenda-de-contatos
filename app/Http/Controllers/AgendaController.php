@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
@@ -11,11 +12,7 @@ class AgendaController extends Controller
         return Contact::all();
     }
 
-    public function create()
-    {
-    }
-
-    public function store()
+    public function store(Request $request)
     {
     }
 
