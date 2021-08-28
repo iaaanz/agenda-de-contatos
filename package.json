@@ -38,6 +38,7 @@
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "@popperjs/core": "^2.9.3",
     "v-mask": "^2.2.4",
+    "vue-picture-input": "^2.1.6",
     "vuetify": "^2.5.8"
   }
 }

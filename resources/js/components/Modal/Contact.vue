@@ -13,16 +13,32 @@
               <div class="card-body bg-white">
                 <form>
                   <div class="row">
-                    <div class="col">
-                      <v-text-field
-                        label="Nome"
-                      ></v-text-field>
-                    </div>
-                    <div class="col">
-                      <v-text-field
-                        label="E-mail"
-                      ></v-text-field>
-                    </div>
+                    <PictureInput
+                      ref="pictureInput"
+                      prefill="defaultImgUrl"
+                      width="120"
+                      height="120"
+                      accept="image/jpeg,image/png"
+                      button-class="btn"
+                      radius="50"
+                      :custom-strings="{
+                        upload: 'upload',
+                        drag: 'drag'
+                      }"
+                      @change="onChange"
+                    >
+                      />
+                      <div class="col">
+                        <v-text-field
+                          label="Nome"
+                        ></v-text-field>
+                      </div>
+                      <div class="col">
+                        <v-text-field
+                          label="E-mail"
+                        ></v-text-field>
+                      </div>
+                    </pictureinput>
                   </div>
                   <div class="row">
                     <div class="col-5">
@@ -84,10 +100,14 @@
 </template>
 
 <script>
+import PictureInput from 'vue-picture-input'
+
 export default {
   name: 'ContactModal',
+  components: { PictureInput },
   data() {
     return {
+      defaultImgUrl: '',
       phone: '',
       cep: '',
       num: '',
@@ -95,6 +115,15 @@ export default {
     }
   },
   methods: {
+    onChange (image) {
+      console.log('New picture selected!')
+      if (image) {
+        console.log('Picture loaded.')
+        this.image = image
+      } else {
+        console.log('FileReader API not supported: use the <form>, Luke!')
+      }
+    },
     close() {
       this.$emit('close');
     },
