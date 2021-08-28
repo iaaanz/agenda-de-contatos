@@ -1,60 +1,58 @@
 <template>
   <v-app>
-    <div class="vh-100 gradient-custom">
-      <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-            <div class="card bg-white" style="border-radius: 1rem;">
-              <div class="card-header p-3">
-                <div class="d-flex justify-content-between">
-                  <div class="row">
-                    <div class="col">
-                      <label class="font-weight-bold h2">Agenda</label>
-                      <div class="clear-fix" />
-                      <label>de contatos</label>
-                    </div>
-                    <div class="col-3 text-end">
-                      <label>16 contatos</label>
-                      <v-btn
-                        color="red"
-                        class="white--text mt-2"
-                        elevation="2"
-                        @click="showContactModal"
-                      >
-                        Novo
-                      </v-btn>
-                    </div>
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-white" style="border-radius: 1rem;">
+            <div class="card-header p-3">
+              <div class="d-flex justify-content-between">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight-bold h2">Agenda</label>
+                    <div class="clear-fix" />
+                    <label>de contatos</label>
+                  </div>
+                  <div class="col-3 text-end">
+                    <label>16 contatos</label>
+                    <v-btn
+                      color="red"
+                      class="white--text mt-2"
+                      elevation="2"
+                      @click="showContactModal"
+                    >
+                      Novo
+                    </v-btn>
                   </div>
                 </div>
               </div>
-              <div class="input-group align-items-center">
-                <font-awesome-icon icon="search" class="ms-3" />
-                <input
-                  type="text"
-                  placeholder="Pesquisar"
-                  class="search_bar form-control bg-white border-0 py-3 m-0"
-                >
-              </div>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-              </ul>
-              <div class="card-body">
-              </div>
+            </div>
+            <div class="input-group align-items-center">
+              <font-awesome-icon icon="search" class="ms-3" />
+              <input
+                type="text"
+                placeholder="Pesquisar"
+                class="search_bar form-control bg-white border-0 py-3 m-0"
+              >
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">An item</li>
+              <li class="list-group-item">A second item</li>
+              <li class="list-group-item">A third item</li>
+              <li class="list-group-item">An item</li>
+              <li class="list-group-item">A second item</li>
+              <li class="list-group-item">A third item</li>
+              <li class="list-group-item">An item</li>
+              <li class="list-group-item">A second item</li>
+              <li class="list-group-item">A third item</li>
+            </ul>
+            <div class="card-body">
             </div>
           </div>
         </div>
       </div>
     </div>
     <ContactModal
-      v-show="isContactModalVisible"
+      v-if="isContactModalVisible"
       @close="showContactModal"
     />
   </v-app>
@@ -68,7 +66,7 @@ export default {
   components: { ContactModal },
   data() {
     return {
-      isContactModalVisible: true,
+      isContactModalVisible: false,
     };
   },
   methods: {
