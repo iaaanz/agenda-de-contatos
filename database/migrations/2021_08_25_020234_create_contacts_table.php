@@ -25,7 +25,7 @@ class CreateContactsTable extends Migration
             $table->string('uf', 2)->nullable();
             $table->string('district')->nullable();
             $table->string('city')->nullable();
-            $table->string('img_name')->nullable();
+            $table->string('img_user')->nullable();
             $table->string('img_path')->nullable();
             $table->timestamps();
         });

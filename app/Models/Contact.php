@@ -10,7 +10,13 @@ class Contact extends Model
         'name',
         'phone',
         'email',
+        'zip_code',
+        'addr_number',
         'address',
-        'image'
+        'complement',
+        'uf',
+        'district',
+        'city',
+        'img_user'
     ];
 }

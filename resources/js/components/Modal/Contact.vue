@@ -26,7 +26,7 @@
                         :prefill="defaultImgUrl"
                         width="120"
                         height="120"
-                        accept="image/jpeg,image/png,image/jpg"
+                        accept="image/jpeg,image/png"
                         button-class="btn"
                         radius="50"
                         @change="onChange"
@@ -151,6 +151,7 @@ export default {
       defaultImgUrl: 'img/default_user.png',
       fields: {
         address: {},
+        name: null
       },
       nameRule: [
         value => !!value || 'Obrigatório',
@@ -159,24 +160,47 @@ export default {
   },
   methods: {
     onChange(img) {
-      if (img) this.fields.img_user = this.$refs.pictureInput.file
+      if (img) this.fields.image = this.$refs.pictureInput.file
     },
+
+    new() {
+
+    },
+
+    edit() {
+
+    },
+
     formSubmit() {
-      if (!this.$refs.form.validate()) return;
+      if (!this.$refs.form.validate()) return
 
       const config = {
         header: {
           'content-type': 'multipart/form-data'
         }
       }
+      const data = new FormData();
+      data.append('name', this.fields.name || '')
+      data.append('email', this.fields.email || '')
+      data.append('phone', this.fields.phone || '')
+      data.append('zip_code', this.fields.cep || '')
+      data.append('addr_number', this.fields.num || '')
+      data.append('address', this.fields.address.logradouro || '')
+      data.append('complement', this.fields.address.complemento || '')
+      data.append('uf', this.fields.address.uf || '')
+      data.append('district', this.fields.address.bairro || '')
+      data.append('city', this.fields.address.localidade || '')
+      data.append('img_user', this.fields.image || '')
 
-      axios.post('/api/agenda/create', this.fields, config)
+      this.valid = false;
+      axios.post('/api/agenda/create', data, config)
         .then(res => {
-          // this.success = res.data.success;
-          console.log(res.data);
+          if (res.status === 200) {
+            this.$emit('close');
+            console.log(res.data);
+          }
         })
         .catch(err => {
-          // this.output = err;
           console.log(err);
         })
 
