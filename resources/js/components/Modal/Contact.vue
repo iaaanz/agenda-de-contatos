@@ -22,6 +22,11 @@
                     <div class="col-5 my-auto">
                       <PictureInput
                         ref="pictureInput"
+                        :key="reloadImg"
+                        :removable="true"
+                        :remove-button-class="`no-uppercase white--text
+                        v-btn v-btn--is-elevated v-btn--has-bg
+                        v-btn--rounded theme--light elevation-2 v-size--default primary`"
                         :hide-change-button="true"
                         :prefill="fields.image || defaultImgUrl"
                         width="120"
@@ -29,6 +34,10 @@
                         accept="image/jpeg,image/png"
                         button-class="btn"
                         radius="50"
+                        :custom-strings="{
+                          remove: 'Remover'
+                        }"
+                        @remove="onRemove"
                         @change="onChange"
                       />
                     </div>
@@ -154,7 +163,8 @@ export default {
   data() {
     return {
       valid: true,
-      isLoading: false,
+      isEditing: false,
+      reloadImg: 0,
       defaultImgUrl: 'img/default_user.png',
       title: 'Novo Contato',
       fields: {
@@ -169,7 +179,7 @@ export default {
   },
   async mounted() {
     if (this.contactId) {
-      this.isLoading = true;
+      this.isEditing = true;
       this.title = 'Editar Contato';
       await axios.get(`/api/agenda/edit/${this.contactId}`)
         .then(res => {
@@ -193,6 +203,10 @@ export default {
     onChange(img) {
       if (img) this.fields.image = this.$refs.pictureInput.file
     },
+    onRemove() {
+      this.reloadImg += 1;
+      this.fields.image = '';
+    },
     formSubmit() {
       if (!this.$refs.form.validate()) return
 
@@ -201,6 +215,7 @@ export default {
           'content-type': 'multipart/form-data'
         }
       }
+
       const data = new FormData();
       data.append('name', this.fields.name || '')
       data.append('email', this.fields.email || '')
@@ -215,7 +230,22 @@ export default {
       data.append('img_user', this.fields.image || '')
 
       this.valid = false;
-      axios.post('/api/agenda/create', data, config)
+      console.log(data.get('img_user'))
+      if (this.isEditing) {
+        data.append('_method', 'PATCH');
+        return axios.post(`/api/agenda/${this.contactId}`, data, config)
+          .then(res => {
+            if (res.status === 200) {
+              console.log(res.data);
+              this.$emit('fetchContacts')
+              this.close();
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+      return axios.post('/api/agenda/create', data, config)
         .then(res => {
           if (res.status === 200) {
             this.$emit('fetchContacts')
@@ -238,12 +268,6 @@ export default {
         })
         .catch(err => console.log(err))
     },
-    maskTel() {
-      // return this.fields.phone.length === 15 ? '(##) #####-####' : '(##) ####-####'
-    },
-    maskCep() {
-      // return this.fields.cep.length === 6 ? '' : '#####-###'
-    },
     close() {
       this.$emit('close');
     },
@@ -251,6 +275,10 @@ export default {
 };
 </script>
 <style>
+  .rmv-button {
+    color: aqua;
+  }
+
   .card-border {
     border: none;
     border-radius: 1rem;
