@@ -52,7 +52,10 @@ class AgendaController extends Controller
     {
     }
 
-    public function delete()
+    public function delete($id)
     {
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+        return response()->json(['Success' => 'Contato excluído com sucesso!']);
     }
 }

@@ -44,7 +44,12 @@
           </v-list-item-content>
         </v-list-item>
       </div>
-      <DeleteModal v-model="isDeleteVisible" :contact="delContact" @close="showDelete" />
+      <DeleteModal
+        v-model="isDeleteVisible"
+        :contact="delContact"
+        @close="showDelete"
+        @contactDeleted="$emit('fetchContacts')"
+      />
     </v-list>
   </div>
 </template>

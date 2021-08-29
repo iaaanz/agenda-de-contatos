@@ -143,7 +143,7 @@ import PictureInput from 'vue-picture-input'
 import axios from 'axios'
 
 export default {
-  name: 'ContactModal',
+  name: 'Contact',
   components: { PictureInput },
   data() {
     return {

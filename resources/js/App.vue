@@ -26,30 +26,33 @@
                 </div>
               </div>
             </div>
-            <ContactList :contacts="contacts" />
+            <ContactList
+              :contacts="contacts"
+              @fetchContacts="fetchContacts"
+            />
             <div class="card-body">
             </div>
           </div>
         </div>
       </div>
     </div>
-    <ContactModal
+    <Contact
       v-if="isContactModalVisible"
       @close="showContactModal"
       @fetchContacts="fetchContacts"
     >
-    </contactmodal>
+    </Contact>
   </v-app>
 </template>
 
 <script>
 import axios from 'axios'
-import ContactModal from './components/Modal/Contact.vue'
+import Contact from './components/Modal/Contact.vue'
 import ContactList from './components/ContactList.vue'
 
 export default {
   name: 'App',
-  components: { ContactModal, ContactList },
+  components: { Contact, ContactList },
   data() {
     return {
       isContactModalVisible: false,
