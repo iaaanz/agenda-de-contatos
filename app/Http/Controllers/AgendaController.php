@@ -44,8 +44,9 @@ class AgendaController extends Controller
         return response()->json(['Sucesso' => 'Contato salvo!']);
     }
 
-    public function edit()
+    public function edit($id)
     {
+        return Contact::findOrFail($id);
     }
 
     public function update()

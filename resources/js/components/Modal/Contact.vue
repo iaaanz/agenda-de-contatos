@@ -7,7 +7,7 @@
             <div class="card card-border primary">
               <div class="card-header p-3">
                 <div class="row">
-                  <h3 class="text-white">Novo Contato</h3>
+                  <h3 class="text-white">{{ title }}</h3>
                 </div>
               </div>
               <div class="card-body bg-white">
@@ -23,7 +23,7 @@
                       <PictureInput
                         ref="pictureInput"
                         :hide-change-button="true"
-                        :prefill="defaultImgUrl"
+                        :prefill="fields.image || defaultImgUrl"
                         width="120"
                         height="120"
                         accept="image/jpeg,image/png"
@@ -48,14 +48,14 @@
                     <div class="col-12 col-sm-5">
                       <v-text-field
                         v-model="fields.phone"
-                        v-mask="maskTel()"
+                        v-mask="'(##) #####-####'"
                         label="Telefone"
                       ></v-text-field>
                     </div>
                     <div class="col">
                       <v-text-field
                         v-model="fields.cep"
-                        v-mask="maskCep()"
+                        v-mask="'#####-###'"
                         label="Cep"
                         @keyup="fillAddress()"
                       ></v-text-field>
@@ -145,25 +145,53 @@ import axios from 'axios'
 export default {
   name: 'Contact',
   components: { PictureInput },
+  props: {
+    contactId: {
+      type: Number,
+      default: null
+    }
+  },
   data() {
     return {
       valid: true,
+      isLoading: false,
       defaultImgUrl: 'img/default_user.png',
+      title: 'Novo Contato',
       fields: {
         address: {},
-        cep: ''
+        cep: '',
+        phone: '',
       },
       nameRule: [
         value => !!value || 'Obrigatório',
       ],
     }
   },
+  async mounted() {
+    if (this.contactId) {
+      this.isLoading = true;
+      this.title = 'Editar Contato';
+      await axios.get(`/api/agenda/edit/${this.contactId}`)
+        .then(res => {
+          console.log(res.data)
+          this.fields.image = res.data.img_path;
+          this.fields.name = res.data.name;
+          this.fields.phone = res.data.phone;
+          this.fields.cep = res.data.zip_code;
+          this.fields.email = res.data.email;
+          this.fields.num = res.data.addr_number;
+          this.fields.address.logradouro = res.data.address;
+          this.fields.address.complemento = res.data.complement;
+          this.fields.address.uf = res.data.uf;
+          this.fields.address.bairro = res.data.district;
+          this.fields.address.localidade = res.data.city;
+        })
+        .catch()
+    }
+  },
   methods: {
     onChange(img) {
       if (img) this.fields.image = this.$refs.pictureInput.file
-    },
-    reloadList() {
-      console.log('contact.vue')
     },
     formSubmit() {
       if (!this.$refs.form.validate()) return
@@ -192,7 +220,6 @@ export default {
           if (res.status === 200) {
             this.$emit('fetchContacts')
             this.close();
-            console.log(res.data);
           }
         })
         .catch(err => {
@@ -201,7 +228,6 @@ export default {
 
     },
     fillAddress() {
-
       // eslint-disable-next-line no-return-assign
       return this.fields.cep.length === 9 ? this.getAddress() : this.fields.address = {};
     },
@@ -213,14 +239,10 @@ export default {
         .catch(err => console.log(err))
     },
     maskTel() {
-      if (this.fields.phone) {
-        return this.fields.phone.length === 15 ? '(##) #####-####' : '(##) ####-#####'
-      }
+      // return this.fields.phone.length === 15 ? '(##) #####-####' : '(##) ####-####'
     },
     maskCep() {
-      if (this.fields.cep) {
-        return this.fields.cep.length === 5 ? '' : '#####-###'
-      }
+      // return this.fields.cep.length === 6 ? '' : '#####-###'
     },
     close() {
       this.$emit('close');

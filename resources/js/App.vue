@@ -13,7 +13,7 @@
                     <label>de contatos</label>
                   </div>
                   <div class="col-4 text-end">
-                    <label>16 contatos</label>
+                    <label>{{ contacts.length }} contatos</label>
                     <v-btn
                       color="red"
                       class="white--text mt-2"
@@ -28,6 +28,7 @@
             </div>
             <ContactList
               :contacts="contacts"
+              @editContact="editContactModal"
               @fetchContacts="fetchContacts"
             />
             <div class="card-body">
@@ -37,7 +38,8 @@
       </div>
     </div>
     <Contact
-      v-if="isContactModalVisible"
+      v-if="isContactVisible"
+      :contact-id="contactId"
       @close="showContactModal"
       @fetchContacts="fetchContacts"
     >
@@ -55,7 +57,9 @@ export default {
   components: { Contact, ContactList },
   data() {
     return {
-      isContactModalVisible: false,
+      isContactVisible: false,
+      isEditContact: false,
+      contactId: null,
       contacts: []
     };
   },
@@ -64,7 +68,12 @@ export default {
   },
   methods: {
     showContactModal() {
-      this.isContactModalVisible = !this.isContactModalVisible;
+      this.isContactVisible = !this.isContactVisible;
+      this.contactId = null;
+    },
+    editContactModal(id) {
+      this.showContactModal();
+      this.contactId = id;
     },
     async fetchContacts() {
       await axios.get('/api/agenda')

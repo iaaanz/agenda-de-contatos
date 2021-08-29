@@ -13,7 +13,7 @@
       <div v-for="contact in contactsList" :key="contact.id">
         <v-list-item two-line>
           <v-list-item-avatar size="50">
-            <v-img :src="contact.img_path" />
+            <v-img :src="contact.img_path || defaultImgUrl" />
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -26,6 +26,7 @@
                   small
                   elevation="0"
                   color="primary"
+                  @click="editContact(contact.id)"
                 >
                   <font-awesome-icon icon="edit" class="text-white lg" />
                 </v-btn>
@@ -44,13 +45,13 @@
           </v-list-item-content>
         </v-list-item>
       </div>
-      <DeleteModal
-        v-model="isDeleteVisible"
-        :contact="delContact"
-        @close="showDelete"
-        @contactDeleted="$emit('fetchContacts')"
-      />
     </v-list>
+    <DeleteModal
+      v-model="isDeleteVisible"
+      :contact="delContact"
+      @close="showDelete"
+      @contactDeleted="$emit('fetchContacts')"
+    />
   </div>
 </template>
 
@@ -71,7 +72,6 @@ export default {
       defaultImgUrl: 'img/default_user.png',
       isDeleteVisible: false,
       delContact: null,
-      updateContact: null,
       search: '',
     }
   },
@@ -86,10 +86,13 @@ export default {
     },
   },
   methods: {
+    editContact(id) {
+      this.$emit('editContact', id);
+    },
     showDelete(id) {
       this.isDeleteVisible = !this.isDeleteVisible;
       this.delContact = id;
-    }
+    },
   }
 }
 </script>
