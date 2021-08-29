@@ -12,7 +12,7 @@
                     <div class="clear-fix" />
                     <label>de contatos</label>
                   </div>
-                  <div class="col-3 text-end">
+                  <div class="col-4 text-end">
                     <label>16 contatos</label>
                     <v-btn
                       color="red"
@@ -26,26 +26,7 @@
                 </div>
               </div>
             </div>
-            <div class="input-group align-items-center">
-              <font-awesome-icon icon="search" class="ms-3" />
-              <input
-                type="text"
-                placeholder="Pesquisar"
-                class="search_bar form-control bg-white border-0 py-3 m-0"
-              >
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-              <li class="list-group-item my-3">An item</li>
-            </ul>
+            <ContactList :contacts="contacts" />
             <div class="card-body">
             </div>
           </div>
@@ -55,25 +36,42 @@
     <ContactModal
       v-if="isContactModalVisible"
       @close="showContactModal"
-    />
+      @fetchContacts="fetchContacts"
+    >
+    </contactmodal>
   </v-app>
 </template>
 
 <script>
+import axios from 'axios'
 import ContactModal from './components/Modal/Contact.vue'
+import ContactList from './components/ContactList.vue'
 
 export default {
   name: 'App',
-  components: { ContactModal },
+  components: { ContactModal, ContactList },
   data() {
     return {
       isContactModalVisible: false,
+      contacts: []
     };
+  },
+  created() {
+    this.fetchContacts();
   },
   methods: {
     showContactModal() {
       this.isContactModalVisible = !this.isContactModalVisible;
     },
+    async fetchContacts() {
+      await axios.get('/api/agenda')
+        .then(res => {
+          if (res.status === 200) {
+            this.contacts = res.data;
+          }
+        })
+        .catch()
+    }
   }
 }
 </script>

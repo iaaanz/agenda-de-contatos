@@ -27,14 +27,16 @@ class AgendaController extends Controller
             'uf' => 'nullable',
             'district' => 'nullable',
             'city' => 'nullable',
-            'img_user' => 'nullable',
+            'img_name' => 'nullable',
+            'img_path' => 'nullable',
         ]);
 
         if ($request->hasFile('img_user')) {
             $imgUser = $request->file('img_user');
             $imageName = Str::random(15) . '.' . $imgUser->getClientOriginalExtension();
             $imgUser->move(public_path('images'), $imageName);
-            $validatedData['img_user'] = $imageName;
+            $validatedData['img_name'] = $imageName;
+            $validatedData['img_path'] = 'images/' . $imageName;
         }
 
         Contact::create($validatedData);

@@ -17,6 +17,7 @@ class Contact extends Model
         'uf',
         'district',
         'city',
-        'img_user'
+        'img_name',
+        'img_path'
     ];
 }

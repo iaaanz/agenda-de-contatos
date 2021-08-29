@@ -151,7 +151,7 @@ export default {
       defaultImgUrl: 'img/default_user.png',
       fields: {
         address: {},
-        name: null
+        cep: ''
       },
       nameRule: [
         value => !!value || 'Obrigatório',
@@ -162,15 +162,9 @@ export default {
     onChange(img) {
       if (img) this.fields.image = this.$refs.pictureInput.file
     },
-
-    new() {
-
+    reloadList() {
+      console.log('contact.vue')
     },
-
-    edit() {
-
-    },
-
     formSubmit() {
       if (!this.$refs.form.validate()) return
 
@@ -196,7 +190,8 @@ export default {
       axios.post('/api/agenda/create', data, config)
         .then(res => {
           if (res.status === 200) {
-            this.$emit('close');
+            this.$emit('fetchContacts')
+            this.close();
             console.log(res.data);
           }
         })
@@ -206,8 +201,9 @@ export default {
 
     },
     fillAddress() {
+
       // eslint-disable-next-line no-return-assign
-      return this.fields.cep.length !== 9 ? this.fields.address = {} : this.getAddress();
+      return this.fields.cep.length === 9 ? this.getAddress() : this.fields.address = {};
     },
     getAddress() {
       axios.get(`https://viacep.com.br/ws/${this.fields.cep}/json/`)
