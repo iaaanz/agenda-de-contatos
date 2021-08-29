@@ -56,12 +56,32 @@ export default {
       this.axios.delete(`/api/agenda/${this.contact}`)
         .then(res => {
           console.log(res.data);
-          this.$emit('contactDeleted')
-          this.close();
+          if (res.status === 200) {
+            this.$emit('contactDeleted')
+            this.$notify({
+              group: 'contact-notification',
+              type: 'success',
+              title: 'Sucesso',
+              text: 'Contato excluído!',
+            });
+          } else {
+            this.$notify({
+              group: 'contact-notification',
+              type: 'error',
+              title: 'Erro',
+              text: 'Ops! Não foi possível excluir, tente novamente',
+            });
+          }
         })
-        .catch(err => {
-          this.close();
+        .catch(() => {
+          this.$notify({
+            group: 'contact-notification',
+            type: 'error',
+            title: 'Erro',
+            text: 'Ops! Não foi possível excluir, tente novamente',
+          });
         });
+      this.close();
     },
     close() {
       this.$emit('close');

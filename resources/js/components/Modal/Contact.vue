@@ -232,29 +232,66 @@ export default {
       console.log(data.get('img_user'))
       if (this.isEditing) {
         data.append('_method', 'PATCH');
-        return this.axios.post(`/api/agenda/${this.contactId}`, data, config)
+        this.axios.post(`/api/agenda/${this.contactId}`, data, config)
           .then(res => {
             if (res.status === 200) {
               console.log(res.data);
               this.$emit('fetchContacts')
-              this.close();
+              this.$notify({
+                group: 'contact-notification',
+                type: 'success',
+                title: 'Sucesso',
+                text: 'Contato salvo!',
+              });
+            } else {
+              this.$notify({
+                group: 'contact-notification',
+                type: 'error',
+                title: 'Erro',
+                text: 'Ops! Não foi possível salvar, tente novamente.',
+              });
             }
           })
           .catch(err => {
             console.log(err);
+            this.$notify({
+              group: 'contact-notification',
+              type: 'error',
+              title: 'Erro',
+              text: 'Ops! Não foi possível salvar, tente novamente.',
+            });
           })
+        this.close();
       }
-      return this.axios.post('/api/agenda/create', data, config)
+      this.axios.post('/api/agenda/create', data, config)
         .then(res => {
           if (res.status === 200) {
             this.$emit('fetchContacts')
-            this.close();
+            this.$notify({
+              group: 'contact-notification',
+              type: 'success',
+              title: 'Sucesso',
+              text: 'Contato salvo!',
+            });
+          } else {
+            this.$notify({
+              group: 'contact-notification',
+              type: 'error',
+              title: 'Erro',
+              text: 'Ops! Algo deu errado, tente novamente.',
+            });
           }
         })
         .catch(err => {
           console.log(err);
+          this.$notify({
+            group: 'contact-notification',
+            type: 'error',
+            title: 'Erro',
+            text: 'Ops! Algo deu errado, tente novamente.',
+          });
         })
-
+      this.close();
     },
     fillAddress() {
       // eslint-disable-next-line no-return-assign

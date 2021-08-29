@@ -42,7 +42,7 @@ class AgendaController extends Controller
 
         Contact::create($validatedData);
 
-        return response()->json(['Sucess' => 'Contato salvo!']);
+        return response()->json(['Success' => 'Contato salvo!']);
     }
 
     public function edit($id)
@@ -93,7 +93,7 @@ class AgendaController extends Controller
 
         $contact->update($validatedData);
 
-        return response()->json(['Sucess' => 'Contato salvo!']);
+        return response()->json(['Success' => 'Contato salvo!']);
     }
 
     public function delete($id)

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueMask from 'v-mask'
 import axios from 'axios';
 import VueAxios from 'vue-axios'
+import Notification from 'vue-notification';
 import App from './App.vue'
 import vuetify from './vuetify'
 
@@ -14,6 +15,7 @@ require('./bootstrap');
 library.add(faSearch, faEdit, faTrash);
 Vue.use(VueMask);
 Vue.use(VueAxios, axios);
+Vue.use(Notification);
 Vue.component('FontAwesomeIcon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
