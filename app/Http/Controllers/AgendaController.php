@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,22 +15,9 @@ class AgendaController extends Controller
         return Contact::all();
     }
 
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|max:50',
-            'phone' => 'nullable|max:20',
-            'email' => 'nullable|max:40',
-            'zip_code' => 'nullable|max:9',
-            'addr_number' => 'nullable|max:10',
-            'address' => 'nullable|max:100',
-            'complement' => 'nullable|max:50',
-            'uf' => 'nullable|max:2',
-            'district' => 'nullable|max:50',
-            'city' => 'nullable|max:50',
-            'img_name' => 'nullable',
-            'img_path' => 'nullable',
-        ]);
+        $validatedData = $request->validated();
 
         if ($request->hasFile('img_user')) {
             $imgUser = $request->file('img_user');
@@ -49,24 +37,11 @@ class AgendaController extends Controller
         return Contact::findOrFail($id);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreContactRequest $request, $id)
     {
         $contact = Contact::findOrFail($id);
 
-        $validatedData = $request->validate([
-            'name' => 'required|max:50',
-            'phone' => 'nullable|max:20',
-            'email' => 'nullable|max:40',
-            'zip_code' => 'nullable|max:9',
-            'addr_number' => 'nullable|max:10',
-            'address' => 'nullable|max:100',
-            'complement' => 'nullable|max:50',
-            'uf' => 'nullable|max:2',
-            'district' => 'nullable|max:50',
-            'city' => 'nullable|max:50',
-            'img_name' => 'nullable',
-            'img_path' => 'nullable',
-        ]);
+        $validatedData = $request->validated();
 
         if (!$contact->img_path && $request->hasFile('img_user')) {
             $imgUser = $request->file('img_user');
