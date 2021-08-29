@@ -46,11 +46,12 @@
                         v-model="fields.name"
                         label="Nome"
                         :rules="[rules.required]"
+                        maxlength="50"
                       ></v-text-field>
                       <v-text-field
                         v-model="fields.email"
                         label="E-mail"
-                        maxlength="20"
+                        maxlength="40"
                       ></v-text-field>
                     </div>
                   </div>
@@ -60,6 +61,7 @@
                         v-model="fields.phone"
                         v-mask="'(##) #####-####'"
                         label="Telefone"
+                        maxlength="15"
                       ></v-text-field>
                     </div>
                     <div class="col">
@@ -67,6 +69,7 @@
                         v-model="fields.cep"
                         v-mask="'#####-###'"
                         label="Cep"
+                        maxlength="9"
                         @keyup="fillAddress()"
                       ></v-text-field>
                     </div>
@@ -74,6 +77,7 @@
                       <v-text-field
                         v-model="fields.num"
                         label="Número"
+                        maxlength="10"
                       ></v-text-field>
                     </div>
                   </div>
@@ -83,12 +87,14 @@
                         v-model="fields.address.logradouro"
                         disabled
                         label="Logradouro"
+                        maxlength="100"
                       ></v-text-field>
                     </div>
                     <div class="col">
                       <v-text-field
                         v-model="fields.address.complemento"
                         label="Complemento"
+                        maxlength="50"
                       ></v-text-field>
                     </div>
                     <div class="col-3 col-sm-2">
@@ -96,6 +102,7 @@
                         v-model="fields.address.uf"
                         disabled
                         label="UF"
+                        maxlength="2"
                       ></v-text-field>
                     </div>
                   </div>
@@ -105,6 +112,7 @@
                         v-model="fields.address.bairro"
                         disabled
                         label="Bairro"
+                        maxlength="50"
                       ></v-text-field>
                     </div>
                     <div class="col-12 col-sm-6">
@@ -112,6 +120,7 @@
                         v-model="fields.address.localidade"
                         disabled
                         label="Cidade"
+                        maxlength="50"
                       ></v-text-field>
                     </div>
                   </div>
