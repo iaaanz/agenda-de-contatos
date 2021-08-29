@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Contact from './components/Modal/Contact.vue'
 import ContactList from './components/ContactList.vue'
 
@@ -76,7 +75,7 @@ export default {
       this.contactId = id;
     },
     async fetchContacts() {
-      await axios.get('/api/agenda')
+      await this.axios.get('/api/agenda')
         .then(res => {
           if (res.status === 200) {
             this.contacts = res.data;

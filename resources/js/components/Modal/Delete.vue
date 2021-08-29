@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'DeleteModal',
   props: {
@@ -55,8 +53,7 @@ export default {
   },
   methods: {
     confirmDelete() {
-      axios.delete(`/api/agenda/${this.contact}`)
-      // axios.delete('/api/agenda/TESTE')
+      this.axios.delete(`/api/agenda/${this.contact}`)
         .then(res => {
           console.log(res.data);
           this.$emit('contactDeleted')

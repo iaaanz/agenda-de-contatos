@@ -149,7 +149,6 @@
 
 <script>
 import PictureInput from 'vue-picture-input'
-import axios from 'axios'
 
 export default {
   name: 'Contact',
@@ -181,7 +180,7 @@ export default {
     if (this.contactId) {
       this.isEditing = true;
       this.title = 'Editar Contato';
-      await axios.get(`/api/agenda/edit/${this.contactId}`)
+      await this.axios.get(`/api/agenda/edit/${this.contactId}`)
         .then(res => {
           console.log(res.data)
           this.fields.image = res.data.img_path;
@@ -233,7 +232,7 @@ export default {
       console.log(data.get('img_user'))
       if (this.isEditing) {
         data.append('_method', 'PATCH');
-        return axios.post(`/api/agenda/${this.contactId}`, data, config)
+        return this.axios.post(`/api/agenda/${this.contactId}`, data, config)
           .then(res => {
             if (res.status === 200) {
               console.log(res.data);
@@ -245,7 +244,7 @@ export default {
             console.log(err);
           })
       }
-      return axios.post('/api/agenda/create', data, config)
+      return this.axios.post('/api/agenda/create', data, config)
         .then(res => {
           if (res.status === 200) {
             this.$emit('fetchContacts')
@@ -262,7 +261,7 @@ export default {
       return this.fields.cep.length === 9 ? this.getAddress() : this.fields.address = {};
     },
     getAddress() {
-      axios.get(`https://viacep.com.br/ws/${this.fields.cep}/json/`)
+      this.axios.get(`https://viacep.com.br/ws/${this.fields.cep}/json/`)
         .then(res => {
           this.fields.address = res.data;
         })
