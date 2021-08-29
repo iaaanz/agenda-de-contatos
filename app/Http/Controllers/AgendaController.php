@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class AgendaController extends Controller
 {
@@ -49,13 +50,16 @@ class AgendaController extends Controller
         return Contact::findOrFail($id);
     }
 
-    public function update()
+    public function update(Request $request, $id)
     {
+        // $contact = Contact::findOrFail($id);
+
     }
 
     public function delete($id)
     {
         $contact = Contact::findOrFail($id);
+        File::exists($contact->img_path) ? File::delete($contact->img_path) : '';
         $contact->delete();
         return response()->json(['Success' => 'Contato excluído com sucesso!']);
     }
