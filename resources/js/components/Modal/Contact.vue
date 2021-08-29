@@ -45,11 +45,12 @@
                       <v-text-field
                         v-model="fields.name"
                         label="Nome"
-                        :rules="nameRule"
+                        :rules="[rules.required]"
                       ></v-text-field>
                       <v-text-field
                         v-model="fields.email"
                         label="E-mail"
+                        maxlength="20"
                       ></v-text-field>
                     </div>
                   </div>
@@ -171,9 +172,9 @@ export default {
         cep: '',
         phone: '',
       },
-      nameRule: [
-        value => !!value || 'Obrigatório',
-      ],
+      rules: {
+        required: value => !!value || 'Obrigatório',
+      }
     }
   },
   async mounted() {

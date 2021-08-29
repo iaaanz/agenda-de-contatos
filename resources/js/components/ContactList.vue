@@ -17,11 +17,14 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title class="d-flex justify-content-between align-items-center">
-              {{ contact.name }}
+            <v-list-item-title
+              class="d-flex justify-content-between align-items-center"
+            >
+              <v-col class="col text-truncate">
+                {{ contact.name }}
+              </v-col>
               <div class="contact-icons">
                 <v-btn
-                  class="mx-2"
                   fab
                   small
                   elevation="0"

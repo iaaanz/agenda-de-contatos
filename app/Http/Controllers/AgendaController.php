@@ -17,17 +17,16 @@ class AgendaController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:50',
             'phone' => 'nullable|max:20',
-            'email' => 'nullable',
-            'email' => 'nullable',
+            'email' => 'nullable|max:40',
             'zip_code' => 'nullable|max:9',
-            'addr_number' => 'nullable',
-            'address' => 'nullable',
-            'complement' => 'nullable',
-            'uf' => 'nullable',
-            'district' => 'nullable',
-            'city' => 'nullable',
+            'addr_number' => 'nullable|max:20',
+            'address' => 'nullable|max:100',
+            'complement' => 'nullable|max:50',
+            'uf' => 'nullable|max:2',
+            'district' => 'nullable|max:50',
+            'city' => 'nullable|max:50',
             'img_name' => 'nullable',
             'img_path' => 'nullable',
         ]);
@@ -55,17 +54,16 @@ class AgendaController extends Controller
         $contact = Contact::findOrFail($id);
 
         $validatedData = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:50',
             'phone' => 'nullable|max:20',
-            'email' => 'nullable',
-            'email' => 'nullable',
+            'email' => 'nullable|max:40',
             'zip_code' => 'nullable|max:9',
-            'addr_number' => 'nullable',
-            'address' => 'nullable',
-            'complement' => 'nullable',
-            'uf' => 'nullable',
-            'district' => 'nullable',
-            'city' => 'nullable',
+            'addr_number' => 'nullable|max:20',
+            'address' => 'nullable|max:100',
+            'complement' => 'nullable|max:50',
+            'uf' => 'nullable|max:2',
+            'district' => 'nullable|max:50',
+            'city' => 'nullable|max:50',
             'img_name' => 'nullable',
             'img_path' => 'nullable',
         ]);
