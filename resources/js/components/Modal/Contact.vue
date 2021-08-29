@@ -182,7 +182,6 @@ export default {
       this.title = 'Editar Contato';
       await this.axios.get(`/api/agenda/edit/${this.contactId}`)
         .then(res => {
-          console.log(res.data)
           this.fields.image = res.data.img_path;
           this.fields.name = res.data.name;
           this.fields.phone = res.data.phone;
@@ -229,13 +228,11 @@ export default {
       data.append('img_user', this.fields.image || '')
 
       this.valid = false;
-      console.log(data.get('img_user'))
       if (this.isEditing) {
         data.append('_method', 'PATCH');
-        this.axios.post(`/api/agenda/${this.contactId}`, data, config)
+        return this.axios.post(`/api/agenda/${this.contactId}`, data, config)
           .then(res => {
             if (res.status === 200) {
-              console.log(res.data);
               this.$emit('fetchContacts')
               this.$notify({
                 group: 'contact-notification',
@@ -251,9 +248,9 @@ export default {
                 text: 'Ops! Não foi possível salvar, tente novamente.',
               });
             }
+            this.close();
           })
-          .catch(err => {
-            console.log(err);
+          .catch(() => {
             this.$notify({
               group: 'contact-notification',
               type: 'error',
@@ -261,9 +258,8 @@ export default {
               text: 'Ops! Não foi possível salvar, tente novamente.',
             });
           })
-        this.close();
       }
-      this.axios.post('/api/agenda/create', data, config)
+      return this.axios.post('/api/agenda/create', data, config)
         .then(res => {
           if (res.status === 200) {
             this.$emit('fetchContacts')
@@ -281,17 +277,17 @@ export default {
               text: 'Ops! Algo deu errado, tente novamente.',
             });
           }
+          this.close();
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
           this.$notify({
             group: 'contact-notification',
             type: 'error',
             title: 'Erro',
             text: 'Ops! Algo deu errado, tente novamente.',
           });
+          this.close();
         })
-      this.close();
     },
     fillAddress() {
       // eslint-disable-next-line no-return-assign
@@ -302,7 +298,7 @@ export default {
         .then(res => {
           this.fields.address = res.data;
         })
-        .catch(err => console.log(err))
+        .catch()
     },
     close() {
       this.$emit('close');
