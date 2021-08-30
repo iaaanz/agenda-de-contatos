@@ -1,160 +1,158 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask ">
-      <div class="modal-wrapper">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="card card-border primary">
-              <div class="card-header p-3">
-                <div class="row">
-                  <h3 class="text-white">{{ title }}</h3>
-                </div>
+  <div class="modal-mask ">
+    <div class="modal-wrapper">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="card card-border primary">
+            <div class="card-header p-3">
+              <div class="row">
+                <h3 class="text-white">{{ title }}</h3>
               </div>
-              <div class="card-body bg-white">
-                <v-form
-                  id="contact-registration-form"
-                  ref="form"
-                  v-model="valid"
-                  lazy-validation
-                  @submit.prevent="formSubmit"
-                >
-                  <div class="row">
-                    <div class="col-5 my-auto">
-                      <PictureInput
-                        ref="pictureInput"
-                        :key="reloadImg"
-                        :removable="true"
-                        :remove-button-class="`no-uppercase white--text
+            </div>
+            <div class="card-body bg-white">
+              <v-form
+                id="contact-registration-form"
+                ref="form"
+                v-model="valid"
+                lazy-validation
+                @submit.prevent="formSubmit"
+              >
+                <div class="row">
+                  <div class="col-5 my-auto">
+                    <PictureInput
+                      ref="pictureInput"
+                      :key="reloadImg"
+                      :removable="true"
+                      :remove-button-class="`no-uppercase white--text
                         v-btn v-btn--is-elevated v-btn--has-bg
                         v-btn--rounded theme--light elevation-2 v-size--default primary`"
-                        :hide-change-button="true"
-                        :prefill="fields.image || defaultImgUrl"
-                        width="110"
-                        height="110"
-                        accept="image/jpeg,image/png"
-                        button-class="btn"
-                        radius="50"
-                        :custom-strings="{
-                          remove: 'Remover'
-                        }"
-                        @remove="onRemove"
-                        @change="onChange"
-                      />
-                    </div>
-                    <div class="col-7">
-                      <v-text-field
-                        v-model="fields.name"
-                        label="Nome"
-                        :rules="[rules.required]"
-                        maxlength="50"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="fields.email"
-                        label="E-mail"
-                        maxlength="40"
-                      ></v-text-field>
-                    </div>
+                      :hide-change-button="true"
+                      :prefill="fields.image || defaultImgUrl"
+                      width="110"
+                      height="110"
+                      accept="image/jpeg,image/png"
+                      button-class="btn"
+                      radius="50"
+                      :custom-strings="{
+                        remove: 'Remover'
+                      }"
+                      @remove="onRemove"
+                      @change="onChange"
+                    />
                   </div>
-                  <div class="row">
-                    <div class="col-12 col-sm-5">
-                      <v-text-field
-                        v-model="fields.phone"
-                        v-mask="'(##) #####-####'"
-                        label="Telefone"
-                        maxlength="15"
-                      ></v-text-field>
-                    </div>
-                    <div class="col">
-                      <v-text-field
-                        v-model="fields.cep"
-                        v-mask="'#####-###'"
-                        label="Cep"
-                        maxlength="9"
-                        @keyup="fillAddress()"
-                      ></v-text-field>
-                    </div>
-                    <div class="col-3">
-                      <v-text-field
-                        v-model="fields.num"
-                        label="Número"
-                        maxlength="10"
-                      ></v-text-field>
-                    </div>
+                  <div class="col-7">
+                    <v-text-field
+                      v-model="fields.name"
+                      label="Nome"
+                      :rules="[rules.required]"
+                      maxlength="50"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="fields.email"
+                      label="E-mail"
+                      maxlength="40"
+                    ></v-text-field>
                   </div>
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      <v-text-field
-                        v-model="fields.address.logradouro"
-                        disabled
-                        label="Logradouro"
-                        maxlength="100"
-                      ></v-text-field>
-                    </div>
-                    <div class="col">
-                      <v-text-field
-                        v-model="fields.address.complemento"
-                        label="Complemento"
-                        maxlength="50"
-                      ></v-text-field>
-                    </div>
-                    <div class="col-3 col-sm-2">
-                      <v-text-field
-                        v-model="fields.address.uf"
-                        disabled
-                        label="UF"
-                        maxlength="2"
-                      ></v-text-field>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12 col-sm-6">
-                      <v-text-field
-                        v-model="fields.address.bairro"
-                        disabled
-                        label="Bairro"
-                        maxlength="50"
-                      ></v-text-field>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <v-text-field
-                        v-model="fields.address.localidade"
-                        disabled
-                        label="Cidade"
-                        maxlength="50"
-                      ></v-text-field>
-                    </div>
-                  </div>
-                </v-form>
-              </div>
-              <div class="card-footer bg-white">
-                <div class="row p-3">
-                  <v-btn
-                    rounded
-                    type="submit"
-                    form="contact-registration-form"
-                    color="primary"
-                    class="no-uppercase white--text"
-                    elevation="2"
-                    :disabled="!valid"
-                  >
-                    Salvar
-                  </v-btn>
-                  <v-btn
-                    text
-                    rounded
-                    class="mt-2 no-uppercase primary--text"
-                    @click="close"
-                  >
-                    Cancelar
-                  </v-btn>
                 </div>
+                <div class="row">
+                  <div class="col-12 col-sm-5">
+                    <v-text-field
+                      v-model="fields.phone"
+                      v-mask="'(##) #####-####'"
+                      label="Telefone"
+                      maxlength="15"
+                    ></v-text-field>
+                  </div>
+                  <div class="col">
+                    <v-text-field
+                      v-model="fields.cep"
+                      v-mask="'#####-###'"
+                      label="Cep"
+                      maxlength="9"
+                      @keyup="fillAddress()"
+                    ></v-text-field>
+                  </div>
+                  <div class="col-3">
+                    <v-text-field
+                      v-model="fields.num"
+                      label="Número"
+                      maxlength="10"
+                    ></v-text-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <v-text-field
+                      v-model="fields.address.logradouro"
+                      disabled
+                      label="Logradouro"
+                      maxlength="100"
+                    ></v-text-field>
+                  </div>
+                  <div class="col">
+                    <v-text-field
+                      v-model="fields.address.complemento"
+                      label="Complemento"
+                      maxlength="50"
+                    ></v-text-field>
+                  </div>
+                  <div class="col-3 col-sm-2">
+                    <v-text-field
+                      v-model="fields.address.uf"
+                      disabled
+                      label="UF"
+                      maxlength="2"
+                    ></v-text-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <v-text-field
+                      v-model="fields.address.bairro"
+                      disabled
+                      label="Bairro"
+                      maxlength="50"
+                    ></v-text-field>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <v-text-field
+                      v-model="fields.address.localidade"
+                      disabled
+                      label="Cidade"
+                      maxlength="50"
+                    ></v-text-field>
+                  </div>
+                </div>
+              </v-form>
+            </div>
+            <div class="card-footer bg-white">
+              <div class="row p-3">
+                <v-btn
+                  rounded
+                  type="submit"
+                  form="contact-registration-form"
+                  color="primary"
+                  class="no-uppercase white--text"
+                  elevation="2"
+                  :disabled="!valid"
+                >
+                  Salvar
+                </v-btn>
+                <v-btn
+                  text
+                  rounded
+                  class="mt-2 no-uppercase primary--text"
+                  @click="close"
+                >
+                  Cancelar
+                </v-btn>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -204,7 +202,14 @@ export default {
           this.fields.address.bairro = res.data.district;
           this.fields.address.localidade = res.data.city;
         })
-        .catch()
+        .catch(() => {
+          this.$notify({
+            group: 'contact-notification',
+            type: 'error',
+            title: 'Erro',
+            text: 'Ops! Não foi recuperar os dados desse contato, tente novamente.',
+          });
+        })
     }
   },
   methods: {
@@ -214,6 +219,22 @@ export default {
     onRemove() {
       this.reloadImg += 1;
       this.fields.image = '';
+    },
+    toastSuccessSave() {
+      this.$notify({
+        group: 'contact-notification',
+        type: 'success',
+        title: 'Sucesso',
+        text: 'Contato salvo!',
+      });
+    },
+    toastErrorSave() {
+      this.$notify({
+        group: 'contact-notification',
+        type: 'error',
+        title: 'Erro',
+        text: 'Ops! Não foi possível salvar, tente novamente.',
+      });
     },
     formSubmit() {
       if (!this.$refs.form.validate()) return
@@ -244,58 +265,29 @@ export default {
           .then(res => {
             if (res.status === 200) {
               this.$emit('fetchContacts')
-              this.$notify({
-                group: 'contact-notification',
-                type: 'success',
-                title: 'Sucesso',
-                text: 'Contato salvo!',
-              });
+              this.toastSuccessSave();
             } else {
-              this.$notify({
-                group: 'contact-notification',
-                type: 'error',
-                title: 'Erro',
-                text: 'Ops! Não foi possível salvar, tente novamente.',
-              });
+              this.toastErrorSave()
             }
             this.close();
           })
           .catch(() => {
-            this.$notify({
-              group: 'contact-notification',
-              type: 'error',
-              title: 'Erro',
-              text: 'Ops! Não foi possível salvar, tente novamente.',
-            });
+            this.toastErrorSave();
+            this.close();
           })
       }
       return this.axios.post('/api/agenda/create', data, config)
         .then(res => {
           if (res.status === 200) {
             this.$emit('fetchContacts')
-            this.$notify({
-              group: 'contact-notification',
-              type: 'success',
-              title: 'Sucesso',
-              text: 'Contato salvo!',
-            });
+            this.toastSuccessSave()
           } else {
-            this.$notify({
-              group: 'contact-notification',
-              type: 'error',
-              title: 'Erro',
-              text: 'Ops! Algo deu errado, tente novamente.',
-            });
+            this.toastErrorSave();
           }
           this.close();
         })
         .catch(() => {
-          this.$notify({
-            group: 'contact-notification',
-            type: 'error',
-            title: 'Erro',
-            text: 'Ops! Algo deu errado, tente novamente.',
-          });
+          this.toastErrorSave()
           this.close();
         })
     },

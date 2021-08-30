@@ -11,25 +11,26 @@
     </div>
     <v-list>
       <v-col
-        v-if="contactsCount <= 0"
+        v-if="contactsList <= 0"
         class="v-empty-list d-flex
         justify-content-center align-center"
       >
-        Nenhum contato cadastrado :(
+        Nenhum contato encontrado :(
       </v-col>
       <div v-for="contact in contactsList" :key="contact.id">
-        <v-list-item
-          two-line
-        >
-          <v-list-item-avatar size="50">
+        <v-list-item two-line>
+          <v-list-item-avatar size="50" class="pointer" @click="editContact(contact.id)">
             <v-img :src="contact.img_path || defaultImgUrl" />
           </v-list-item-avatar>
-
           <v-list-item-content>
             <v-list-item-title
               class="d-flex justify-content-between align-items-center"
             >
-              <v-col class="text-truncate" @click="editContact(contact.id)" v-text="contact.name" />
+              <v-col
+                class="text-truncate pointer"
+                @click="editContact(contact.id)"
+                v-text="contact.name"
+              />
               <div class="contact-icons">
                 <v-btn
                   fab
@@ -85,9 +86,6 @@ export default {
     }
   },
   computed: {
-    contactsCount: function() {
-      return this.contacts;
-    },
     contactsList() {
       if (this.search) {
         return this.contacts.filter(
@@ -113,6 +111,14 @@ export default {
 .v-list{
   height: 450px;
   overflow-y: auto;
+}
+
+.v-list-item:hover {
+  background-color: rgb(228, 228, 228) !important;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .v-empty-list {

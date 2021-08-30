@@ -38,13 +38,15 @@
           </div>
         </div>
       </div>
-      <Contact
-        v-if="isContactVisible"
-        :contact-id="contactId"
-        @close="showContactModal"
-        @fetchContacts="fetchContacts"
-      >
-      </Contact>
+      <transition name="modal">
+        <Contact
+          v-if="isContactVisible"
+          :contact-id="contactId"
+          @close="showContactModal"
+          @fetchContacts="fetchContacts"
+        >
+        </Contact>
+      </transition>
     </v-app>
   </div>
 </template>
@@ -76,27 +78,25 @@ export default {
       this.showContactModal();
       this.contactId = id;
     },
+    toastErrorFetchList() {
+      this.$notify({
+        group: 'contact-notification',
+        type: 'error',
+        title: 'Erro',
+        text: 'Ops! Não foi possível obter os contatos, tente novamente mais tarde.',
+      });
+    },
     async fetchContacts() {
       await this.axios.get('/api/agenda')
         .then(res => {
           if (res.status === 200) {
             this.contacts = res.data;
           } else {
-            this.$notify({
-              group: 'contact-notification',
-              type: 'error',
-              title: 'Erro',
-              text: 'Ops! Não foi possível obter os contatos, tente novamente mais tarde.',
-            });
+            this.toastErrorFetchList();
           }
         })
         .catch(() => {
-          this.$notify({
-            group: 'contact-notification',
-            type: 'error',
-            title: 'Erro',
-            text: 'Ops! Não foi possível obter os contatos, tente novamente mais tarde.',
-          });
+          this.toastErrorFetchList();
         })
     }
   }
@@ -114,7 +114,7 @@ export default {
 
   .custom-notification.success {
     margin-top: 10px;
-    border-left: 10px solid #171b92;
+    border-left: 10px solid #11c517;
     border-radius: 5px 0 0 5px;
   }
 
@@ -125,7 +125,7 @@ export default {
   }
 
   .custom-notification.success > .notification-title {
-    color: #171b92;
+    color: #11c517;
   }
 
   .custom-notification.error > .notification-title {

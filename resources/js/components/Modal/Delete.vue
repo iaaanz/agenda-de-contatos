@@ -52,34 +52,34 @@ export default {
     }
   },
   methods: {
+    toastSuccessDelete() {
+      this.$notify({
+        group: 'contact-notification',
+        type: 'success',
+        title: 'Sucesso',
+        text: 'Contato excluído!',
+      });
+    },
+    toastErrorDelete() {
+      this.$notify({
+        group: 'contact-notification',
+        type: 'error',
+        title: 'Erro',
+        text: 'Ops! Não foi possível excluir, tente novamente',
+      });
+    },
     confirmDelete() {
       this.axios.delete(`/api/agenda/${this.contact}`)
         .then(res => {
-          console.log(res.data);
           if (res.status === 200) {
             this.$emit('contactDeleted')
-            this.$notify({
-              group: 'contact-notification',
-              type: 'success',
-              title: 'Sucesso',
-              text: 'Contato excluído!',
-            });
+            this.toastSuccessDelete();
           } else {
-            this.$notify({
-              group: 'contact-notification',
-              type: 'error',
-              title: 'Erro',
-              text: 'Ops! Não foi possível excluir, tente novamente',
-            });
+            this.toastErrorDelete();
           }
         })
         .catch(() => {
-          this.$notify({
-            group: 'contact-notification',
-            type: 'error',
-            title: 'Erro',
-            text: 'Ops! Não foi possível excluir, tente novamente',
-          });
+          this.toastErrorDelete()
         });
       this.close();
     },
