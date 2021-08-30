@@ -2,7 +2,8 @@
   <v-row justify="center">
     <v-dialog
       v-model="show"
-      max-width="320"
+      max-width="440"
+      content-class="v-dialog--custom"
     >
       <v-card>
         <v-card-title class="text-h5">
@@ -91,5 +92,26 @@ export default {
 </script>
 
 <style>
+.v-dialog--custom {
+  width: 100%;
+}
+
+@media only screen and (max-width: 375px) {
+  .v-dialog--custom {
+    width: 200px;
+  }
+}
+
+@media only screen and (min-width: 400px) {
+    .v-dialog--custom {
+    width: 350px;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+    .v-dialog--custom {
+    width: 100%;
+  }
+}
 
 </style>
