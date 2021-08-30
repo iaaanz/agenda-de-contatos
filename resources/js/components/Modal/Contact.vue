@@ -171,6 +171,7 @@ export default {
     return {
       valid: true,
       isEditing: false,
+      lastCepSearched: '',
       reloadImg: 0,
       defaultImgUrl: 'img/default_user.png',
       title: 'Novo Contato',
@@ -292,8 +293,17 @@ export default {
         })
     },
     fillAddress() {
-      // eslint-disable-next-line no-return-assign
-      return this.fields.cep.length === 9 ? this.getAddress() : this.fields.address = {};
+      if (this.fields.cep.length !== 9) {
+        this.fields.address = {};
+        this.lastCepSearched = '';
+      }
+      if (this.fields.cep.length === 9 && (this.lastCepSearched === this.fields.cep)) {
+        this.lastCepSearched = this.fields.cep;
+      }
+      if (this.fields.cep.length === 9 && (this.lastCepSearched !== this.fields.cep)) {
+        this.lastCepSearched = this.fields.cep;
+        return this.getAddress();
+      }
     },
     getAddress() {
       this.axios.get(`https://viacep.com.br/ws/${this.fields.cep}/json/`)
