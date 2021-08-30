@@ -208,7 +208,7 @@ export default {
             group: 'contact-notification',
             type: 'error',
             title: 'Erro',
-            text: 'Ops! Não foi recuperar os dados desse contato, tente novamente.',
+            text: 'Ops! Não foi possível recuperar os dados desse contato, tente novamente.',
           });
         })
     }
