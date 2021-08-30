@@ -22,10 +22,6 @@
                     <PictureInput
                       ref="pictureInput"
                       :key="reloadImg"
-                      :removable="true"
-                      :remove-button-class="`no-uppercase white--text
-                        v-btn v-btn--is-elevated v-btn--has-bg
-                        v-btn--rounded theme--light elevation-2 v-size--default primary`"
                       :hide-change-button="true"
                       :prefill="fields.image || defaultImgUrl"
                       width="110"
@@ -36,9 +32,21 @@
                       :custom-strings="{
                         remove: 'Remover'
                       }"
-                      @remove="onRemove"
                       @change="onChange"
                     />
+                    <div class="row">
+                      <div class="col text-center">
+                        <v-btn
+                          rounded
+                          color="primary"
+                          class="no-uppercase white--text"
+                          elevation="2"
+                          @click="clearImage"
+                        >
+                          Remover
+                        </v-btn>
+                      </div>
+                    </div>
                   </div>
                   <div class="col-7">
                     <v-text-field
@@ -217,7 +225,7 @@ export default {
     onChange(img) {
       if (img) this.fields.image = this.$refs.pictureInput.file
     },
-    onRemove() {
+    clearImage() {
       this.reloadImg += 1;
       this.fields.image = '';
     },
@@ -296,9 +304,6 @@ export default {
       if (this.fields.cep.length !== 9) {
         this.fields.address = {};
         this.lastCepSearched = '';
-      }
-      if (this.fields.cep.length === 9 && (this.lastCepSearched === this.fields.cep)) {
-        this.lastCepSearched = this.fields.cep;
       }
       if (this.fields.cep.length === 9 && (this.lastCepSearched !== this.fields.cep)) {
         this.lastCepSearched = this.fields.cep;
