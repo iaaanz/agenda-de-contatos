@@ -36,7 +36,6 @@ class AgendaController extends Controller
     public function update(StoreContactRequest $request, $id)
     {
         $contact = Contact::findOrFail($id);
-
         $validatedData = $request->validated();
         $requestImg = $request->hasFile('img_user');
 

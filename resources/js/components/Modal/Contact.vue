@@ -29,8 +29,8 @@
                         v-btn--rounded theme--light elevation-2 v-size--default primary`"
                         :hide-change-button="true"
                         :prefill="fields.image || defaultImgUrl"
-                        width="120"
-                        height="120"
+                        width="110"
+                        height="110"
                         accept="image/jpeg,image/png"
                         button-class="btn"
                         radius="50"
@@ -317,10 +317,6 @@ export default {
 };
 </script>
 <style>
-  .rmv-button {
-    color: aqua;
-  }
-
   .card-border {
     border: none;
     border-radius: 1rem;

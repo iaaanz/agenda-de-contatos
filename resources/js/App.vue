@@ -33,8 +33,7 @@
                 @editContact="editContactModal"
                 @fetchContacts="fetchContacts"
               />
-              <div class="card-body">
-              </div>
+              <div class="card-body" />
             </div>
           </div>
         </div>

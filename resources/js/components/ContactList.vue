@@ -10,8 +10,17 @@
       >
     </div>
     <v-list>
+      <v-col
+        v-if="contactsCount <= 0"
+        class="v-empty-list d-flex
+        justify-content-center align-center"
+      >
+        Nenhum contato cadastrado :(
+      </v-col>
       <div v-for="contact in contactsList" :key="contact.id">
-        <v-list-item two-line>
+        <v-list-item
+          two-line
+        >
           <v-list-item-avatar size="50">
             <v-img :src="contact.img_path || defaultImgUrl" />
           </v-list-item-avatar>
@@ -20,9 +29,7 @@
             <v-list-item-title
               class="d-flex justify-content-between align-items-center"
             >
-              <v-col class="col text-truncate">
-                {{ contact.name }}
-              </v-col>
+              <v-col class="text-truncate" @click="editContact(contact.id)" v-text="contact.name" />
               <div class="contact-icons">
                 <v-btn
                   fab
@@ -31,17 +38,16 @@
                   color="primary"
                   @click="editContact(contact.id)"
                 >
-                  <font-awesome-icon icon="edit" class="text-white lg" />
+                  <font-awesome-icon icon="edit" class="text-white" size="lg" />
                 </v-btn>
                 <v-btn
-                  class="mx-2"
                   fab
                   small
                   elevation="0"
                   color="red"
                   @click="showDelete(contact.id)"
                 >
-                  <font-awesome-icon icon="trash" class="text-white lg" />
+                  <font-awesome-icon icon="trash" class="text-white" size="lg" />
                 </v-btn>
               </div>
             </v-list-item-title>
@@ -79,6 +85,9 @@ export default {
     }
   },
   computed: {
+    contactsCount: function() {
+      return this.contacts;
+    },
     contactsList() {
       if (this.search) {
         return this.contacts.filter(
@@ -104,5 +113,11 @@ export default {
 .v-list{
   height: 450px;
   overflow-y: auto;
+}
+
+.v-empty-list {
+  height: 430px;
+  overflow-y: auto;
+  color: rgb(104, 97, 97)
 }
 </style>
