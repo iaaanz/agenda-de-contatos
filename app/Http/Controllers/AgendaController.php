@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
 use App\Models\Contact;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
 class AgendaController extends Controller
@@ -18,13 +16,11 @@ class AgendaController extends Controller
     public function store(StoreContactRequest $request)
     {
         $validatedData = $request->validated();
+        $requestImg = $request->hasFile('img_user');
 
-        if ($request->hasFile('img_user')) {
-            $imgUser = $request->file('img_user');
-            $imageName = Str::random(15) . '.' . $imgUser->getClientOriginalExtension();
-            $imgUser->move(public_path('images'), $imageName);
-            $validatedData['img_name'] = $imageName;
-            $validatedData['img_path'] = 'images/' . $imageName;
+        if ($requestImg) {
+            $requestImg = $request->file('img_user');
+            $validatedData = setNewUserImg($requestImg, $validatedData);
         }
 
         Contact::create($validatedData);
@@ -42,25 +38,18 @@ class AgendaController extends Controller
         $contact = Contact::findOrFail($id);
 
         $validatedData = $request->validated();
+        $requestImg = $request->hasFile('img_user');
 
-        if (!$contact->img_path && $request->hasFile('img_user')) {
-            $imgUser = $request->file('img_user');
-            $imageName = Str::random(15) . '.' . $imgUser->getClientOriginalExtension();
-            $imgUser->move(public_path('images'), $imageName);
-            $validatedData['img_name'] = $imageName;
-            $validatedData['img_path'] = 'images/' . $imageName;
-        } else if ($contact->img_path && $request->hasFile('img_user')) {
+        if (!$contact->img_path && $requestImg) {
+            $requestImg = $request->file('img_user');
+            $validatedData = setNewUserImg($requestImg, $validatedData);
+        } else if ($contact->img_path && $requestImg) {
             File::exists($contact->img_path) ? File::delete($contact->img_path) : '';
-            $imgUser = $request->file('img_user');
-            $imageName = Str::random(15) . '.' . $imgUser->getClientOriginalExtension();
-            $imgUser->move(public_path('images'), $imageName);
-            $validatedData['img_name'] = $imageName;
-            $validatedData['img_path'] = 'images/' . $imageName;
-        } else if ($contact->img_path && !$request->hasFile('img_user')) {
+            $requestImg = $request->file('img_user');
+            $validatedData = setNewUserImg($requestImg, $validatedData);
+        } else if ($contact->img_path && !$requestImg) {
             if ($contact->img_path !== $request->get('img_user')) {
-                File::exists($contact->img_path) ? File::delete($contact->img_path) : '';
-                $validatedData['img_name'] = '';
-                $validatedData['img_path'] = '';
+                $validatedData = delUserImg($contact->img_path, $validatedData);
             };
         }
 
