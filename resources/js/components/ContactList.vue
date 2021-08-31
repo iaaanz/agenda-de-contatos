@@ -109,7 +109,7 @@ export default {
 
 <style>
 .v-list{
-  height: 450px;
+  height: 55vh;
   overflow-y: auto;
 }
 
@@ -122,7 +122,7 @@ export default {
 }
 
 .v-empty-list {
-  height: 430px;
+  height: 50vh;
   overflow-y: auto;
   color: rgb(104, 97, 97)
 }
