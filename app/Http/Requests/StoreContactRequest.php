@@ -34,8 +34,6 @@ class StoreContactRequest extends FormRequest
             'uf' => 'nullable|max:2',
             'district' => 'nullable|max:50',
             'city' => 'nullable|max:50',
-            'img_name' => 'nullable',
-            'img_path' => 'nullable',
         ];
     }
 }
